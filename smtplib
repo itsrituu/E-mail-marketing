@@ -1,0 +1,34 @@
+import smtplib
+import csv
+
+# Open a connection to the SMTP server
+server = smtplib.SMTP('smtp.gmail.com', 587)
+
+# Start the encryption
+server.starttls()
+
+# Login to the email account
+# Replace 'your_email@example.com' and 'your_password' with your own email and password
+server.login('your_email@example.com', 'your_password')
+
+# Open the CSV file containing the list of recipients
+with open('recipients.csv', 'r') as file:
+    # Use the CSV reader to parse the file
+    reader = csv.reader(file)
+    # Iterate over the rows in the CSV file
+    for row in reader:
+        # The first column in the row is the email address
+        recipient = row[0]
+        # The second column in the row is the name
+        name = row[1]
+        # The subject of the email
+        subject = 'Bulk email test'
+        # The body of the email
+        body = f'Hello {name},\n\nThis is a test of the bulk email system.\n\nRegards,\nYour Name'
+        # Construct the email message
+        message = f'Subject: {subject}\n\n{body}'
+        # Send the email
+        server.sendmail('your_email@example.com', recipient, message)
+
+# Close the connection to the server
+server.quit()
